@@ -1,0 +1,5 @@
+spring:
+    application:
+        name: e-content-backend
+server:
+    port: 9090
