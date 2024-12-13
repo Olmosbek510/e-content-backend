@@ -1,66 +1,51 @@
 package com.inha.os.econtentbackend;
 
+import com.google.gson.Gson;
+import com.inha.os.econtentbackend.dto.request.RequestDto;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class EContentBackendApplication {
-    public static void main(String[] args) throws Exception {
-        startSocketServer();
+
+    public static void main(String[] args) {
+        Gson gson1 = new Gson();
+        RequestDto requestDto = gson1.fromJson("""
+                {
+                                                  "entity": "STUDENT",
+                                                  "action": "CREATE_STUDENT",
+                                                  "data": "{
+                                                               \\\\"firstName\\\\": \\\\"John\\\\",
+                                                               \\\\"lastName\\\\": \\\\"Doe\\\\",
+                                                               \\\\"email\\\\": \\\\"john.doe@example.com\\\\",
+                                                               \\\\"password\\\\": \\\\"securePassword123\\\\",
+                                                               \\\\"confirmPassword\\\\": \\\\"securePassword123\\\\",
+                                                               \\\\"studentId\\\\": \\\\"S12345\\\\",
+                                                               \\\\"university\\\\": \\\\"Inha University\\\\",
+                                                               \\\\"birthDate\\\\": \\\\"2000-05-15\\\\",
+                                                               \\\\"username\\\\": \\\\"john_doe\\\\",
+                                                               \\\\"phoneNumber\\\\": \\\\"+1234567890\\\\",
+                                                               \\\\"address\\\\": \\\\"123 Main Street, Example City\\\\"
+                                                             }",
+                                                  "token": null
+                                                }
+                }
+                """, RequestDto.class);
+        System.out.println("data parsed: " + requestDto);
         SpringApplication.run(EContentBackendApplication.class, args);
     }
 
-    private static void startSocketServer() {
-        int port = 9090;
-        ExecutorService executorService = Executors.newCachedThreadPool();
 
-        new Thread(() -> {
-            try (ServerSocket serverSocket = new ServerSocket(port)) {
-                System.out.println("Socket server is running on port " + port);
-                while (true) {
-                    Socket clientSocket = serverSocket.accept();
-                    System.out.println("Client connected!");
-                    executorService.submit(() -> handleClient(clientSocket));
-                }
-            } catch (IOException e) {
-                System.err.println("Error starting server: " + e.getMessage());
-            }
-        }).start();
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
-    private static void handleClient(Socket clientSocket) {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
-
-            String clientData;
-            while ((clientData = in.readLine()) != null) {
-                System.out.println("Received from client: " + clientData);
-
-                // Process the data (convert to uppercase)
-                String responseData = "Processed: " + clientData.toUpperCase();
-
-                // Send response to the client
-                out.write(responseData);
-                out.newLine();
-                out.flush();
-
-                System.out.println("Response sent to client: " + responseData);
-            }
-
-        } catch (IOException e) {
-            System.err.println("Error handling client: " + e.getMessage());
-        } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                System.err.println("Error closing client socket: " + e.getMessage());
-            }
-        }
+    @Bean
+    public Gson gson() {
+        return new Gson();
     }
 }

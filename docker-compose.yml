@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  e-content-db:
+    image: postgres:13
+    container_name: e_content_db
+    ports:
+      - "5440:5432"
+    environment:
+      POSTGRES_DB: e-content
+      POSTGRES_USER: olmosbek
+      POSTGRES_PASSWORD: qwerty123
+    volumes:
+      - postgres_e_content_data:/var/lib/postgresql/data
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  postgres_e_content_data:

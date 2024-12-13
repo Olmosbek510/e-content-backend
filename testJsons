@@ -1,0 +1,19 @@
+{
+  "entity": "STUDENT",
+  "action": "CREATE_STUDENT",
+  "data": "{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "password": "securePassword123",
+    "confirmPassword": "securePassword123",
+    "studentId": "S12345",
+    "university": "Inha University",
+    "birthDate": "2000-05-15",
+    "username": "john_doe",
+    "phoneNumber": "+1234567890",
+    "address": "123 Main Street, Example City"
+  }",
+  "token": null
+}
+<<EOF>>

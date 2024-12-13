@@ -1,5 +1,35 @@
 spring:
-    application:
-        name: e-content-backend
-server:
+  application:
+    name: e-content-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5440/e-content
+    username: olmosbek
+    password: qwerty123
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  main:
+    allow-bean-definition-overriding: true
+
+
+jwt:
+  secret:
+    key: "hpdsufhusdhufhsadhf89783739279gifuhjjdsfihh89e4h893hfewu8y938&*(&(*&#A#$*#(&"
+  expiration:
+    ms: 86400000
+
+backend:
+  socket:
     port: 9090
+#tcp:
+#  server:
+#    port: 9090
+#    host: "127.0.0.1"
+#server:
+#  port: 8081
+
