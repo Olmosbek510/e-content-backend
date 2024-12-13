@@ -1,19 +1,32 @@
 {
-  "entity": "STUDENT",
-  "action": "CREATE_STUDENT",
-  "data": "{
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john.doe@example.com",
-    "password": "securePassword123",
-    "confirmPassword": "securePassword123",
-    "studentId": "S12345",
-    "university": "Inha University",
-    "birthDate": "2000-05-15",
-    "username": "john_doe",
-    "phoneNumber": "+1234567890",
-    "address": "123 Main Street, Example City"
-  }",
-  "token": null
+                                     "entity": "STUDENT",
+                                     "action": "CREATE_STUDENT",
+                                     "data": "{
+                                                    'firstName': 'Olmosbek',
+                                                    'lastName': 'Urazboev',
+                                                    'email': 'olmos04@gmail.com',
+                                                    'password': 'olmos555%',
+                                                    'confirmPassword': 'olmos555%',
+                                                    'studentId': 'S123456',
+                                                    'university': 'Inha University',
+                                                    'birthDate': '2000-05-15',
+                                                    'username': 'olmos.urazboev',
+                                                    'phoneNumber': '+998933460021',
+                                                    'address': '123 Main Street, Example City'
+                                                }",
+                                     "token": null
+}
+<<EOF>>
+
+Login dto
+---
+{
+                                     "entity": "AUTH",
+                                     "action": "LOGIN",
+                                     "data": "{
+                                                    'email': 'olmos04@gmail.com',
+                                                    'password': 'olmos555%'
+                                                }",
+                                     "token": null
 }
 <<EOF>>

@@ -1,8 +1,13 @@
 package com.inha.os.econtentbackend.service;
 
+import com.inha.os.econtentbackend.dto.request.LoginRequestDto;
+import com.inha.os.econtentbackend.dto.response.LoginResponseDto;
+import com.inha.os.econtentbackend.exception.InvalidCredentialsException;
+import com.inha.os.econtentbackend.exception.UserNotFoundException;
+
 import java.util.Set;
 
-public interface AuthenticationService {
+public interface AuthService {
     String authenticate(String username, String password) throws Exception;
 
     /**
@@ -21,4 +26,6 @@ public interface AuthenticationService {
      * @return true if authorized, false otherwise.
      */
     boolean isAuthorizedForAction(String action, Set<String> roles);
+
+    LoginResponseDto login(LoginRequestDto loginRequestDto) throws UserNotFoundException, InvalidCredentialsException;
 }

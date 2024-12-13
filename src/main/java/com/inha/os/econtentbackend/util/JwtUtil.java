@@ -3,15 +3,20 @@ package com.inha.os.econtentbackend.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 @Component
+@Slf4j
 public class JwtUtil {
 
     @Value("${jwt.secret.key}")
@@ -20,18 +25,20 @@ public class JwtUtil {
     @Value("${jwt.expiration.ms}")
     private long expirationTime;
 
-    public String generateToken(String username, Set<String> roles) {
+    public String generateToken(String email, Set<String> roles) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", roles);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
+
+
 
     // Extract the username from the token
     public String extractUsername(String token) {
@@ -59,9 +66,9 @@ public class JwtUtil {
     }
 
     // Validate the token
-    public boolean validateToken(String token, String username) {
+    public boolean validateToken(String token, String email) {
         String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
+        return (extractedUsername.equals(email) && !isTokenExpired(token));
     }
 
     // Check if the token is expired
@@ -72,6 +79,19 @@ public class JwtUtil {
     // Extract expiration date from token
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public String generateRefreshToken(String email, Set<String> roles) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", roles);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime * 7)) // seven days
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
     // Functional interface to extract claims

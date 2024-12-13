@@ -35,4 +35,21 @@ public class UserServiceImpl implements UserService {
         }
         return userMapper.toEntity(studentCreateDto);
     }
+
+    @Override
+    public User save(User user) throws UserAlreadyExistsException {
+        if (userRepository.existsUserByUsernameOrEmail(user.getUsername(), user.getEmail())) {
+            throw new UserAlreadyExistsException("User '%s' already exists".formatted(user.getUsername()));
+        }
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User findByEmail(String email) throws UserNotFoundException {
+        Optional<User> userByEmail = userRepository.findUserByEmail(email);
+        if (userByEmail.isEmpty()) {
+            throw new UserNotFoundException("User with email '%s' not found");
+        }
+        return userByEmail.get();
+    }
 }

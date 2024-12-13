@@ -1,8 +1,7 @@
 package com.inha.os.econtentbackend.dto.response;
 
-import com.inha.os.econtentbackend.entity.enums.RoleName;
+import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -12,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class BaseResponseDto {
-    private String status;
+    private ResponseStatus status;
     private String roleName;
 }

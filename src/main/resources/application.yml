@@ -19,7 +19,7 @@ spring:
 
 jwt:
   secret:
-    key: "hpdsufhusdhufhsadhf89783739279gifuhjjdsfihh89e4h893hfewu8y938&*(&(*&#A#$*#(&"
+    key: "WCILX9EyoOCuNtzRFYw5QSm6vFBCtdVq0XAsHZnXnDPbwmxMxCWYFTmf9j1QccVI"
   expiration:
     ms: 86400000
 

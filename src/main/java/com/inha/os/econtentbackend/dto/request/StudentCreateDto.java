@@ -28,8 +28,8 @@ public class StudentCreateDto {
     private String studentId;
     @NotBlank(message = "university cannot bu blank")
     private String university;
-    @NotNull(message = "birth date cannot be null")
-    private LocalDate birthDate;
+    @NotBlank(message = "birth date cannot be blank")
+    private String birthDate;
     @NotBlank(message = "username cannot be blank")
     private String username;
     @NotBlank(message = "phone number cannot be blank")

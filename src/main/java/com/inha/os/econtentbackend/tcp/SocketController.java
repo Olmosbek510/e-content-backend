@@ -1,6 +1,7 @@
 package com.inha.os.econtentbackend.tcp;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.inha.os.econtentbackend.dispatcher.CentralizedDispatcher;
 import com.inha.os.econtentbackend.dto.request.RequestDto;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class SocketController implements CommandLineRunner {
     private final CentralizedDispatcher centralizedDispatcher;
     @Value("${backend.socket.port}")
     private int socketPort;
+    //    private final ObjectMapper objectMapper;
     private final Gson gson;
 
     @Override
@@ -41,55 +43,52 @@ public class SocketController implements CommandLineRunner {
         try (InputStream input = bridgeSocket.getInputStream();
              BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(bridgeSocket.getOutputStream()))) {
 
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            StringBuilder receivedData = new StringBuilder();
+            while (true) {
+                String rawMessage = receiveData(input);
+                log.info("Received complete JSON payload:\n{}", rawMessage);
 
-            log.info("Waiting to receive data...");
+                try {
+                    RequestDto requestDTO = gson.fromJson(rawMessage, RequestDto.class);
+                    String response = centralizedDispatcher.dispatch(
+                            requestDTO.getEntity(),
+                            requestDTO.getAction(),
+                            requestDTO.getData(),
+                            requestDTO.getToken()
+                    );
 
-            // Read data from the socket input stream
-            while ((bytesRead = input.read(buffer)) != -1) {
-                String chunk = new String(buffer, 0, bytesRead);
-                receivedData.append(chunk);
-
-                // Stop reading when <<EOF>> is found
-                if (receivedData.toString().contains("<<EOF>>")) {
-                    break;
+                    log.info("Sending response:\n{}", response);
+                    writer.write(response);
+                    writer.newLine();
+                    writer.flush();
+                } catch (Exception e) {
+                    log.error("Error processing request", e);
+                    writer.write("Error: Processing failed");
+                    writer.newLine();
+                    writer.flush();
                 }
-            }
-
-            // Clean up the received message by removing the <<EOF>> marker
-            String rawMessage = receivedData.toString();
-            String cleanedMessage = cleanMessage(rawMessage);
-            log.info("Complete JSON payload received:\n{}", cleanedMessage);
-
-            // Deserialize and process the cleaned JSON
-            try {
-                RequestDto requestDTO = gson.fromJson(cleanedMessage, RequestDto.class);
-
-                // Dispatch the request to your centralized handler
-                String response = centralizedDispatcher.dispatch(
-                        requestDTO.getEntity(),
-                        requestDTO.getAction(),
-                        requestDTO.getData(),
-                        requestDTO.getToken()
-                );
-
-                // Send the response back to the bridge
-                log.info("Sending response:\n{}", response);
-                writer.write(response);
-                writer.newLine();
-                writer.flush();
-            } catch (Exception e) {
-                log.error("Error deserializing JSON or processing the request", e);
-                writer.write("Error: Invalid JSON or processing error");
-                writer.newLine();
-                writer.flush();
             }
         } catch (IOException e) {
             log.error("Error handling bridge connection", e);
         }
     }
+
+    private String receiveData(InputStream inputStream) throws IOException {
+        StringBuilder data = new StringBuilder();
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            data.append(new String(buffer, 0, bytesRead));
+
+            // Stop reading if the EOF marker is found
+            if (data.toString().contains("<<EOF>>")) {
+                break;
+            }
+        }
+
+        return data.toString().replace("<<EOF>>", "").trim();
+    }
+
 
     private String cleanMessage(String rawMessage) {
         // Remove the <<EOF>> marker

@@ -69,12 +69,12 @@ int main() {
         char backend_buffer[BUFFER_SIZE];
         int bytes_received;
 
-        // Communication loop
+        // Communication loop for receiving requests from the client
         while ((bytes_received = recv(client_socket, client_buffer, BUFFER_SIZE, 0)) > 0) {
             client_buffer[bytes_received] = '\0';
             printf("Received from client: %s\n", client_buffer);
 
-            // Forward to backend
+            // Forward data to backend
             if (send(backend_socket, client_buffer, bytes_received, 0) == -1) {
                 perror("Failed to send data to backend");
                 break;

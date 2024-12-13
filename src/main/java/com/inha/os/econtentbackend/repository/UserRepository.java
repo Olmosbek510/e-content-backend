@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
 
     boolean existsUserByUsernameOrEmail(@NotBlank(message = "username cannot be blank") String username, @NotBlank(message = "email cannot be blank") String email);
+
+    Optional<User> findUserByEmail(String email);
 }

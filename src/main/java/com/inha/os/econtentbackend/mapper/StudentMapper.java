@@ -8,7 +8,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface StudentMapper {
-    @Mapping(source = "birthDate", target = "birthDate")
     @Mapping(source = "university", target = "university")
     @Mapping(source = "phoneNumber", target = "phoneNumber")
     @Mapping(source = "address", target = "address")
@@ -16,6 +15,6 @@ public interface StudentMapper {
 
     @Mapping(source = "user.username", target = "username")
     @Mapping(source = "user.email", target = "email")
-    @Mapping(source = "id", target = "studentId")
+    @Mapping(source = "studentId", target = "studentId")
     StudentCreateResponseDto toCreateResponseDto(Student savedStudent);
 }

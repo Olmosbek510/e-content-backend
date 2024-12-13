@@ -20,6 +20,7 @@ public class Student extends BaseEntity {
     private UUID id;
     @OneToOne
     private User user;
+    private String studentId;
     private LocalDate birthDate;
     private String university;
     @Column(nullable = false, unique = true)

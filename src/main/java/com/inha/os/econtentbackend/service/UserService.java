@@ -9,4 +9,8 @@ public interface UserService {
     User findByUsername(String username) throws UserNotFoundException;
 
     User setUpUser(StudentCreateDto studentCreateDto) throws UserAlreadyExistsException;
+
+    User save(User user) throws UserAlreadyExistsException;
+
+    User findByEmail(String email) throws UserNotFoundException;
 }

@@ -1,11 +1,9 @@
 package com.inha.os.econtentbackend.config;
 
-import com.google.gson.Gson;
-import com.inha.os.econtentbackend.dto.request.RequestDto;
 import com.inha.os.econtentbackend.service.DataInitService;
-import com.inha.os.econtentbackend.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +11,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Runner implements CommandLineRunner {
     private final DataInitService dataInitService;
-    private final Gson gson;
+    @Value("${spring.jpa.hibernate.ddl-auto}")
+    private String ddlAuto;
 
     @SneakyThrows
     @Override
     public void run(String... args) {
-        dataInitService.initRoles();
+        if (ddlAuto.equalsIgnoreCase("create")) {
+            dataInitService.initRoles();
+        }
     }
 }

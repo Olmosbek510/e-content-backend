@@ -87,6 +87,7 @@ int main() {
         printf("Response from Backend:\n%s\n", recv_buffer);
     }
 
+    // Close the client socket (only after the user decides to quit)
     close(client_socket);
     return 0;
 }

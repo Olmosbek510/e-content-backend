@@ -1,6 +1,6 @@
 package com.inha.os.econtentbackend.dto.request;
 
-import com.inha.os.econtentbackend.entity.enums.Actions;
+import com.inha.os.econtentbackend.entity.interfaces.Actions;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
