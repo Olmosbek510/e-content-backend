@@ -3,6 +3,8 @@ package com.inha.os.econtentbackend.service.impl;
 import com.inha.os.econtentbackend.dto.request.LoginRequestDto;
 import com.inha.os.econtentbackend.dto.response.LoginResponseDto;
 import com.inha.os.econtentbackend.entity.User;
+import com.inha.os.econtentbackend.entity.enums.RoleName;
+import com.inha.os.econtentbackend.entity.interfaces.Actions;
 import com.inha.os.econtentbackend.exception.InvalidCredentialsException;
 import com.inha.os.econtentbackend.exception.UserNotFoundException;
 import com.inha.os.econtentbackend.service.AuthService;
@@ -13,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,10 +55,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean isAuthorizedForAction(String action, Set<String> roles) {
-        if (action.startsWith("CREATE_USER")) {
-            return roles.contains("ADMIN") || roles.contains("CONTENT_MANAGER");
-        } else if (action.startsWith("DELETE_USER")) {
-            return roles.contains("ADMIN");
+        if (action.startsWith(Actions.Student.GET_PROFILE)) {
+            return roles.contains(RoleName.ROLE_STUDENT.name()) ||
+                    roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+
+        } else if (action.startsWith(Actions.Majors.GET_MAJORS)) {
+            return roles.contains(RoleName.ROLE_SYS_ADMIN.name()) ||
+                    roles.contains(RoleName.ROLE_STUDENT.name()) ||
+                    roles.contains(RoleName.ROLE_CONTENT_MANAGER.name());
         } else if (action.startsWith("UPDATE_USER")) {
             return roles.contains("ADMIN") || roles.contains("CONTENT_MANAGER");
         } else if (action.startsWith("CREATE_TRAINER")) {
@@ -88,5 +96,13 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(refreshToken)
                 .roles(roles.stream().toList())
                 .build();
+    }
+
+    @Override
+    public void validate(String email, String token) throws AccessDeniedException {
+        String emailAddress = jwtUtil.extractEmail(token);
+        if (!emailAddress.equals(email)) {
+            throw new AccessDeniedException("Access denied. You can perform operation with your own account");
+        }
     }
 }

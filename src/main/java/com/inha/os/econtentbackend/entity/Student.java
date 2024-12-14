@@ -19,9 +19,11 @@ public class Student extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
     private String studentId;
     private LocalDate birthDate;
+    private String work;
     private String university;
     @Column(nullable = false, unique = true)
     private String phoneNumber;

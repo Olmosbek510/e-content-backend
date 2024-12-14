@@ -30,3 +30,14 @@ Login dto
                                      "token": null
 }
 <<EOF>>
+----
+Get Profile Dto
+{
+                                     "entity": "STUDENT",
+                                     "action": "GET_PROFILE",
+                                     "data": "{
+                                                    'email': 'olmos04@gmail.com'
+                                                }",
+                                     "token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6IlJPTEVfU1RVREVOVCIsInN1YiI6Im9sbW9zMDRAZ21haWwuY29tIiwiaWF0IjoxNzM0MTU4NjUyLCJleHAiOjE3MzQyNDUwNTJ9.Z_arEIFvdg2hfDFZwdjV6WM4qjzxqN2aj5hMYDL5eUQ"
+}
+<<EOF>>

@@ -5,6 +5,7 @@ import com.inha.os.econtentbackend.dto.response.LoginResponseDto;
 import com.inha.os.econtentbackend.exception.InvalidCredentialsException;
 import com.inha.os.econtentbackend.exception.UserNotFoundException;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Set;
 
 public interface AuthService {
@@ -28,4 +29,6 @@ public interface AuthService {
     boolean isAuthorizedForAction(String action, Set<String> roles);
 
     LoginResponseDto login(LoginRequestDto loginRequestDto) throws UserNotFoundException, InvalidCredentialsException;
+
+    void validate(String email, String token) throws AccessDeniedException;
 }

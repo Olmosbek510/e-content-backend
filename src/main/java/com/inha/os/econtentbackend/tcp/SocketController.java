@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -26,7 +27,7 @@ public class SocketController implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        try (ServerSocket serverSocket = new ServerSocket(socketPort)) {
+        try (ServerSocket serverSocket = new ServerSocket(socketPort, 50, InetAddress.getByName("0.0.0.0"))) {
             System.out.println("Backend is listening on port " + socketPort);
             while (true) {
                 Socket bridgeSocket = serverSocket.accept();

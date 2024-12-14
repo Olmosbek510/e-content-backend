@@ -2,13 +2,17 @@ package com.inha.os.econtentbackend.service.impl;
 
 import com.inha.os.econtentbackend.dto.request.StudentCreateDto;
 import com.inha.os.econtentbackend.dto.response.StudentCreateResponseDto;
+import com.inha.os.econtentbackend.dto.response.StudentProfileDto;
+import com.inha.os.econtentbackend.entity.Photo;
 import com.inha.os.econtentbackend.entity.Role;
 import com.inha.os.econtentbackend.entity.Student;
 import com.inha.os.econtentbackend.entity.User;
 import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
 import com.inha.os.econtentbackend.entity.enums.RoleName;
 import com.inha.os.econtentbackend.exception.StudentAlreadyExistsException;
+import com.inha.os.econtentbackend.exception.StudentNotFoundException;
 import com.inha.os.econtentbackend.exception.UserAlreadyExistsException;
+import com.inha.os.econtentbackend.exception.UserNotFoundException;
 import com.inha.os.econtentbackend.mapper.StudentMapper;
 import com.inha.os.econtentbackend.repository.StudentRepository;
 import com.inha.os.econtentbackend.service.RoleService;
@@ -21,7 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.relation.RoleNotFoundException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.Base64;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -32,6 +37,8 @@ public class StudentServiceImpl implements StudentService {
     private final StudentMapper studentMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final Base64.Encoder encoder;
+    private final Base64.Decoder decoder;
 
     @Override
     @Transactional
@@ -61,5 +68,33 @@ public class StudentServiceImpl implements StudentService {
         responseDto.setStatus(ResponseStatus.SUCCESS);
         responseDto.setRoleName(RoleName.ROLE_STUDENT.name());
         return responseDto;
+    }
+
+    @Override
+    public StudentProfileDto getProfile(String email) throws StudentNotFoundException {
+        Optional<Student> optionalStudent = studentRepository.findByEmail(email);
+
+        if (optionalStudent.isEmpty()) {
+            throw new StudentNotFoundException("student with email '%s' not found".formatted(email));
+        }
+
+        Student student = optionalStudent.get();
+
+        Photo photo = student.getUser().getPhoto();
+        String base64Photo = null;
+        if (photo != null) {
+            base64Photo = encoder.encodeToString(photo.getContent());
+        }
+
+        StudentProfileDto response = studentMapper.toProfileDto(student);
+
+        response.setPhoto(base64Photo);
+        Optional<Role> optionalRole = student.getUser().getRoles().stream().findFirst();
+
+        optionalRole.ifPresent(role -> response.setRoleName(role.getRoleName().name()));
+
+        response.setDateOfBirth(student.getBirthDate().toString());
+        response.setStatus(ResponseStatus.SUCCESS);
+        return response;
     }
 }

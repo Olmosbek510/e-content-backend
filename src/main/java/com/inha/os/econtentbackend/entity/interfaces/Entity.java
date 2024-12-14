@@ -4,4 +4,5 @@ public interface Entity {
     String STUDENT = "STUDENT";
     String USER = "USER";
     String AUTH = "AUTH";
+    String MAJOR = "MAJOR";
 }

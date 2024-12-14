@@ -5,6 +5,7 @@ import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
 import com.inha.os.econtentbackend.entity.interfaces.Entity;
 import com.inha.os.econtentbackend.exception.InvalidEntityException;
 import com.inha.os.econtentbackend.exception.exception.BaseException;
+import com.inha.os.econtentbackend.service.AuthService;
 import com.inha.os.econtentbackend.util.ExceptionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ public class CentralizedDispatcher {
     private final Gson gson;
     private final StudentActionDispatcher studentActionDispatcher;
     private final AuthorizationDispatcher authorizationDispatcher;
+    private final MajorActionDispatcher majorActionDispatcher;
 
     /**
      * Dispatches the request based on the entity and action.
@@ -32,6 +34,8 @@ public class CentralizedDispatcher {
                 return authorizationDispatcher.dispatch(action, dataNode, token);
             } else if (entity.equalsIgnoreCase(Entity.STUDENT)) {
                 return studentActionDispatcher.dispatch(action, dataNode, token);
+            } else if (entity.equalsIgnoreCase(Entity.MAJOR)) {
+                return majorActionDispatcher.dispatch(action, dataNode, token);
             } else {
                 throw new InvalidEntityException("entity '%s' is invalid".formatted(entity));
             }
