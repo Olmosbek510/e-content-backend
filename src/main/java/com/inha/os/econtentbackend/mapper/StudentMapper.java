@@ -34,19 +34,4 @@ public interface StudentMapper {
     @Mapping(source = "address", target = "address")
     @Mapping(source = "work", target = "work")
     StudentProfileDto toProfileDto(Student student);
-//    public class Student extends BaseEntity {
-//        @Id
-//        @GeneratedValue(strategy = GenerationType.UUID)
-//        private UUID id;
-//        @OneToOne
-//        private User user;
-//        private String studentId;
-//        private LocalDate birthDate;
-//        private String work;
-//        private String university;
-//        @Column(nullable = false, unique = true)
-//        private String phoneNumber;
-//        private String address;
-//    }
-
 }

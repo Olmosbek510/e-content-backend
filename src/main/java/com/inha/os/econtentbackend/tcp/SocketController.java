@@ -22,7 +22,6 @@ public class SocketController implements CommandLineRunner {
     private final CentralizedDispatcher centralizedDispatcher;
     @Value("${backend.socket.port}")
     private int socketPort;
-    //    private final ObjectMapper objectMapper;
     private final Gson gson;
 
     @Override

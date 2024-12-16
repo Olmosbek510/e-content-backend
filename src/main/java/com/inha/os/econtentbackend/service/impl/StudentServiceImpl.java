@@ -12,7 +12,6 @@ import com.inha.os.econtentbackend.entity.enums.RoleName;
 import com.inha.os.econtentbackend.exception.StudentAlreadyExistsException;
 import com.inha.os.econtentbackend.exception.StudentNotFoundException;
 import com.inha.os.econtentbackend.exception.UserAlreadyExistsException;
-import com.inha.os.econtentbackend.exception.UserNotFoundException;
 import com.inha.os.econtentbackend.mapper.StudentMapper;
 import com.inha.os.econtentbackend.repository.StudentRepository;
 import com.inha.os.econtentbackend.service.RoleService;

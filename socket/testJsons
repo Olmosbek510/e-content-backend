@@ -31,6 +31,16 @@ Login dto
 }
 <<EOF>>
 ----
+{
+    {
+        id: 1
+        name: "name"
+    },
+    {
+        id: 2
+        name: "name1"
+    }
+}
 Get Profile Dto
 {
                                      "entity": "STUDENT",

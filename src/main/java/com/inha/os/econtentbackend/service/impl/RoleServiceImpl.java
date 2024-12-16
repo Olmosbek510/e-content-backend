@@ -2,7 +2,6 @@ package com.inha.os.econtentbackend.service.impl;
 
 import com.inha.os.econtentbackend.entity.Role;
 import com.inha.os.econtentbackend.entity.enums.RoleName;
-import com.inha.os.econtentbackend.exception.RoleAlreadyExistsException;
 import com.inha.os.econtentbackend.repository.RoleRepository;
 import com.inha.os.econtentbackend.service.RoleService;
 import lombok.RequiredArgsConstructor;
