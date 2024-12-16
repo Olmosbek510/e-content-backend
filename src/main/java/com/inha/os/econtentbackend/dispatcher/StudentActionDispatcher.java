@@ -12,7 +12,6 @@ import com.inha.os.econtentbackend.exception.StudentNotFoundException;
 import com.inha.os.econtentbackend.exception.UserAlreadyExistsException;
 import com.inha.os.econtentbackend.exception.UserNotFoundException;
 import com.inha.os.econtentbackend.service.AuthService;
-import com.inha.os.econtentbackend.service.MajorService;
 import com.inha.os.econtentbackend.service.StudentService;
 import com.inha.os.econtentbackend.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
