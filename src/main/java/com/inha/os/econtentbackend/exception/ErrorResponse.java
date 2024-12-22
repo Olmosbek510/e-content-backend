@@ -1,6 +1,5 @@
 package com.inha.os.econtentbackend.exception;
 
-import com.inha.os.econtentbackend.dto.response.BaseResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +9,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class ErrorResponse extends BaseResponseDto {
+public class ErrorResponse {
     private String message;
 }

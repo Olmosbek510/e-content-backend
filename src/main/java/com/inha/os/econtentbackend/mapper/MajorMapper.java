@@ -1,5 +1,6 @@
 package com.inha.os.econtentbackend.mapper;
 
+import com.inha.os.econtentbackend.dto.response.MajorNameResponseDto;
 import com.inha.os.econtentbackend.dto.response.MajorResponseDto;
 import com.inha.os.econtentbackend.entity.Major;
 import com.inha.os.econtentbackend.entity.Photo;
@@ -24,4 +25,8 @@ public interface MajorMapper {
         }
         return Base64.getEncoder().encodeToString(value.getContent());
     }
+
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "id", target = "id")
+    MajorNameResponseDto toMajorNameResponseDto(Major major);
 }

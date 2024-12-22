@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class MajorsGetResponseDto extends BaseResponseDto {
+public class MajorsGetResponseDto {
     private List<MajorResponseDto> majors;
 }

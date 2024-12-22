@@ -1,4 +1,7 @@
 package com.inha.os.econtentbackend.exception;
 
-public class ContentTypeAlreadyExistsExeption {
+public class ContentTypeAlreadyExistsException extends BaseException {
+    public ContentTypeAlreadyExistsException(String message) {
+        super(message);
+    }
 }

@@ -1,4 +1,4 @@
-package com.inha.os.econtentbackend.exception.exception;
+package com.inha.os.econtentbackend.exception;
 
 public class InvalidActionTypeException extends BaseException {
     public InvalidActionTypeException(String message) {

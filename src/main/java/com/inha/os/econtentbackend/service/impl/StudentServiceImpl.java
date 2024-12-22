@@ -44,8 +44,14 @@ public class StudentServiceImpl implements StudentService {
     public StudentCreateResponseDto createStudent(StudentCreateDto studentCreateDto) throws UserAlreadyExistsException, StudentAlreadyExistsException, RoleNotFoundException {
         boolean exists = studentRepository.existsStudentByPhoneNumber(studentCreateDto.getPhoneNumber());
         if (exists) {
-            throw new StudentAlreadyExistsException("student with phone number '%s'".formatted(studentCreateDto.getPhoneNumber()));
+            throw new StudentAlreadyExistsException("phone number '%s' already taken".formatted(studentCreateDto.getPhoneNumber()));
         }
+
+        boolean existsById = studentRepository.existsStudentByStudentId(studentCreateDto.getStudentId());
+        if (existsById) {
+            throw new StudentAlreadyExistsException("id '%s' already taken".formatted(studentCreateDto.getStudentId()));
+        }
+
         User user = userService.setUpUser(studentCreateDto);
         String plainPassword = user.getPassword();
         LocalDate birthDate = LocalDate.parse(studentCreateDto.getBirthDate());
@@ -95,5 +101,10 @@ public class StudentServiceImpl implements StudentService {
         response.setDateOfBirth(student.getBirthDate().toString());
         response.setStatus(ResponseStatus.SUCCESS);
         return response;
+    }
+
+    @Override
+    public Long getTotalStudentsCount() {
+        return studentRepository.count();
     }
 }

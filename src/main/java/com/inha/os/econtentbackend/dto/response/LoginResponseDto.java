@@ -12,8 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class LoginResponseDto extends BaseResponseDto{
+public class LoginResponseDto {
     private String accessToken;
     private String refreshToken;
-    private List<String> roles;
 }

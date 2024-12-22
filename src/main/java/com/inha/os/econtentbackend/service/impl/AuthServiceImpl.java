@@ -2,7 +2,9 @@ package com.inha.os.econtentbackend.service.impl;
 
 import com.inha.os.econtentbackend.dto.request.LoginRequestDto;
 import com.inha.os.econtentbackend.dto.response.LoginResponseDto;
+import com.inha.os.econtentbackend.entity.Role;
 import com.inha.os.econtentbackend.entity.User;
+import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
 import com.inha.os.econtentbackend.entity.enums.RoleName;
 import com.inha.os.econtentbackend.entity.interfaces.Actions;
 import com.inha.os.econtentbackend.exception.InvalidCredentialsException;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,26 +29,6 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
-
-    @Override
-    public String authenticate(String username, String password) throws Exception {
-        User user = userService.findByUsername(username);
-
-        if (user == null) {
-            throw new RuntimeException("Invalid username or password");
-        }
-
-        boolean matches = passwordEncoder.matches(password, user.getPassword());
-
-        if (!matches) {
-            throw new RuntimeException("Invalid username or password");
-        }
-
-        Set<String> roles = user.getRoles().stream()
-                .map(role -> role.getRoleName().name())
-                .collect(Collectors.toSet());
-        return jwtUtil.generateToken(username, roles);
-    }
 
     @Override
     public boolean canPerformAction(String action, String token) {
@@ -59,19 +42,19 @@ public class AuthServiceImpl implements AuthService {
             return roles.contains(RoleName.ROLE_STUDENT.name()) ||
                     roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
                     roles.contains(RoleName.ROLE_SYS_ADMIN.name());
-
         } else if (action.startsWith(Actions.Majors.GET_MAJORS)) {
             return roles.contains(RoleName.ROLE_SYS_ADMIN.name()) ||
                     roles.contains(RoleName.ROLE_STUDENT.name()) ||
                     roles.contains(RoleName.ROLE_CONTENT_MANAGER.name());
-        } else if (action.startsWith("UPDATE_USER")) {
-            return roles.contains("ADMIN") || roles.contains("CONTENT_MANAGER");
-        } else if (action.startsWith("CREATE_TRAINER")) {
-            return roles.contains("ADMIN") || roles.contains("TRAINER_MANAGER");
-        } else if (action.startsWith("DELETE_TRAINER")) {
-            return roles.contains("ADMIN");
-        } else if (action.startsWith("UPDATE_TRAINER")) {
-            return roles.contains("ADMIN") || roles.contains("TRAINER_MANAGER");
+        } else if (action.startsWith(Actions.Subject.GET_SUBJECTS)) {
+            return roles.contains(RoleName.ROLE_SYS_ADMIN.name()) ||
+                    roles.contains(RoleName.ROLE_STUDENT.name()) ||
+                    roles.contains(RoleName.ROLE_CONTENT_MANAGER.name());
+        } else if (action.startsWith(Actions.Statistics.GET_STATISTICS)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.Majors.ADD_MAJOR)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name());
         }
         return false;
     }
@@ -88,13 +71,14 @@ public class AuthServiceImpl implements AuthService {
 
         Set<String> roles = user.getRoles().stream().map(role -> role.getRoleName().name()).collect(Collectors.toSet());
 
+        Optional<Role> optionalRole = user.getRoles().stream().findFirst();
         String accessToken = jwtUtil.generateToken(loginRequestDto.getEmail(), roles);
         String refreshToken = jwtUtil.generateRefreshToken(user.getEmail(), roles);
+
 
         return LoginResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .roles(roles.stream().toList())
                 .build();
     }
 

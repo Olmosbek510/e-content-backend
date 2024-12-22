@@ -4,8 +4,7 @@ import com.google.gson.Gson;
 import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
 import com.inha.os.econtentbackend.entity.interfaces.Entity;
 import com.inha.os.econtentbackend.exception.InvalidEntityException;
-import com.inha.os.econtentbackend.exception.exception.BaseException;
-import com.inha.os.econtentbackend.service.AuthService;
+import com.inha.os.econtentbackend.exception.BaseException;
 import com.inha.os.econtentbackend.util.ExceptionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,6 +17,10 @@ public class CentralizedDispatcher {
     private final StudentActionDispatcher studentActionDispatcher;
     private final AuthorizationDispatcher authorizationDispatcher;
     private final MajorActionDispatcher majorActionDispatcher;
+    private final SubjectActionDispatcher subjectActionDispatcher;
+    private final SystemAdminDispatcher systemAdminDispatcher;
+    private final BookDispatcher bookDispatcher;
+    private final DashboardDispatcher dashboardDispatcher;
 
     /**
      * Dispatches the request based on the entity and action.
@@ -36,6 +39,14 @@ public class CentralizedDispatcher {
                 return studentActionDispatcher.dispatch(action, dataNode, token);
             } else if (entity.equalsIgnoreCase(Entity.MAJOR)) {
                 return majorActionDispatcher.dispatch(action, dataNode, token);
+            } else if (entity.equalsIgnoreCase(Entity.SUBJECT)) {
+                return subjectActionDispatcher.dispatch(action, dataNode, token);
+            } else if (entity.equalsIgnoreCase(Entity.BOOK)) {
+                return bookDispatcher.dispatch(action, dataNode, token);
+            } else if (entity.equalsIgnoreCase(Entity.SYSTEM_ADMIN)) {
+                return systemAdminDispatcher.dispatch(action, dataNode, token);
+            } else if (entity.equalsIgnoreCase(Entity.STATISTICS_DASHBOARD)) {
+                return dashboardDispatcher.dispatch(action, dataNode, token);
             } else {
                 throw new InvalidEntityException("entity '%s' is invalid".formatted(entity));
             }

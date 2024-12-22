@@ -10,7 +10,6 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
     @Mapping(target = "firstName", source = "firstName")
     @Mapping(target = "lastName", source = "lastName")
-    @Mapping(target = "username", source = "username")
     @Mapping(target = "password", source = "password")
     @Mapping(target = "email", source = "email")
     User toEntity(StudentCreateDto createDto);

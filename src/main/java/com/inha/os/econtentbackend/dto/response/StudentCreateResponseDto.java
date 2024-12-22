@@ -11,7 +11,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class StudentCreateResponseDto extends BaseResponseDto {
     private String email;
-    private String username;
     private String studentId;
     private String password;
 }

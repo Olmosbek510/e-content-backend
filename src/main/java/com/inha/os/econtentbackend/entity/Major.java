@@ -19,6 +19,6 @@ public class Major extends BaseEntity {
     private String name;
     @Column(nullable = false)
     private String description;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Photo photo;
 }

@@ -1,18 +1,27 @@
 package com.inha.os.econtentbackend.service.impl;
 
-import com.inha.os.econtentbackend.dto.response.MajorResponseDto;
-import com.inha.os.econtentbackend.dto.response.MajorsGetResponseDto;
+import com.inha.os.econtentbackend.dto.request.MajorCreateRequestDto;
+import com.inha.os.econtentbackend.dto.request.MajorDeleteRequestDto;
+import com.inha.os.econtentbackend.dto.request.MajorUpdateRequestDto;
+import com.inha.os.econtentbackend.dto.response.*;
 import com.inha.os.econtentbackend.entity.Major;
-import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
+import com.inha.os.econtentbackend.entity.Photo;
+import com.inha.os.econtentbackend.exception.MajorAlreadyExistsException;
+import com.inha.os.econtentbackend.exception.MajorNameAlreadyExistsException;
+import com.inha.os.econtentbackend.exception.MajorNotFoundException;
 import com.inha.os.econtentbackend.mapper.MajorMapper;
 import com.inha.os.econtentbackend.repository.MajorRepository;
 import com.inha.os.econtentbackend.service.MajorService;
+import com.inha.os.econtentbackend.service.PhotoService;
+import com.inha.os.econtentbackend.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,25 +29,113 @@ public class MajorServiceImpl implements MajorService {
     private final MajorRepository majorRepository;
     private final MajorMapper majorMapper;
     private final Base64.Encoder encoder;
+    private final PhotoService photoService;
+    private final Base64.Decoder decoder;
 
     @Override
-    public MajorsGetResponseDto getMajors() {
+    public List<MajorResponseDto> getMajors() {
         List<Major> majors = majorRepository.findAll();
-        List<MajorResponseDto> majorResponseDtos = setUpMajorDTOS(majors);
-        MajorsGetResponseDto.builder()
-                .majors(majorResponseDtos)
-                .status(ResponseStatus.SUCCESS)
+        return setUpMajorDTOS(majors);
+    }
+
+    @Override
+    public Major getById(Integer id) throws MajorNotFoundException {
+        Optional<Major> optionalMajor = majorRepository.findMajorById(id);
+        if (optionalMajor.isEmpty()) {
+            throw new MajorNotFoundException("Major with id '%d' not found".formatted(id));
+        }
+        return optionalMajor.get();
+    }
+
+    @Override
+    public Long getTotalMajorsCount() {
+        return majorRepository.count();
+    }
+
+    @Override
+    public Major save(Major major) throws MajorAlreadyExistsException {
+        boolean existsMajorByName = majorRepository.existsMajorByName(major.getName());
+        if (existsMajorByName) {
+            throw new MajorAlreadyExistsException("major '%s' already exists".formatted(major.getName()));
+        }
+        return majorRepository.save(major);
+    }
+
+    @Override
+    public MajorCreateResponseDto createMajor(MajorCreateRequestDto majorCreateDto) {
+        Major major = Major.builder()
+                .name(majorCreateDto.getName())
+                .description(majorCreateDto.getDescription())
                 .build();
-        return new MajorsGetResponseDto();
+        if (majorCreateDto.getBase64Photo() != null && !majorCreateDto.getPhotoName().isBlank()) {
+            Photo photo = photoService.create(majorCreateDto.getBase64Photo(), majorCreateDto.getPhotoName());
+            major.setPhoto(photo);
+        }
+        Major savedMajor = majorRepository.save(major);
+        return MajorCreateResponseDto.builder().majorName(savedMajor.getName()).build();
+    }
+
+    @Override
+    @Transactional
+    public MajorUpdateResponseDto updateMajor(MajorUpdateRequestDto majorUpdateRequestDto) throws MajorNotFoundException, MajorNameAlreadyExistsException {
+        Optional<Major> major = majorRepository.findById(majorUpdateRequestDto.getMajorId());
+        if (major.isEmpty()) {
+            throw new MajorNotFoundException("major with ID '%s' not found".formatted(majorUpdateRequestDto.getMajorId()));
+        }
+        Major oldMajor = major.get();
+        if (!majorUpdateRequestDto.getName().isBlank() && !majorUpdateRequestDto.getName().equals(oldMajor.getName()) &&
+                majorRepository.existsMajorByName(majorUpdateRequestDto.getName())
+        ) {
+            throw new MajorNameAlreadyExistsException("major name '%s' already exists".formatted(majorUpdateRequestDto.getName()));
+        }
+        if (!majorUpdateRequestDto.getName().isBlank()) {
+            oldMajor.setName(majorUpdateRequestDto.getName());
+        }
+        if (!majorUpdateRequestDto.getDescription().isBlank()) {
+            oldMajor.setDescription(majorUpdateRequestDto.getDescription());
+        }
+        if (!majorUpdateRequestDto.getPhotoName().isBlank() && !majorUpdateRequestDto.getPhotoContent().isBlank()) {
+            Photo photo = oldMajor.getPhoto();
+            photo.setContent(decoder.decode(majorUpdateRequestDto.getPhotoContent()));
+            photo.setType(FileUtil.getFileExtension(majorUpdateRequestDto.getPhotoName()));
+        }
+        Major updatedMajor = majorRepository.save(oldMajor);
+        return MajorUpdateResponseDto.builder()
+                .description(updatedMajor.getDescription())
+                .name(updatedMajor.getDescription())
+                .build();
+    }
+
+    @Override
+    public List<MajorNameResponseDto> getMajorNames() {
+        List<Major> majors = majorRepository.findAll();
+        List<MajorNameResponseDto> majorNameResponseDtos = new LinkedList<>();
+        for (Major major : majors) {
+            majorNameResponseDtos.add(majorMapper.toMajorNameResponseDto(major));
+        }
+        return majorNameResponseDtos;
+    }
+
+    @Override
+    public MajorDeleteResponseDto deleteMajor(MajorDeleteRequestDto deleteRequestDto) throws MajorNotFoundException {
+        Optional<Major> optionalMajor = majorRepository.findById(deleteRequestDto.getId());
+        if (optionalMajor.isPresent()) {
+            throw new MajorNotFoundException("Major with id '%s' not found".formatted(deleteRequestDto.getId()));
+        }
+        MajorDeleteResponseDto response = MajorDeleteResponseDto.builder()
+                .id(deleteRequestDto.getId())
+                .build();
+        majorRepository.deleteById(deleteRequestDto.getId());
+        return response;
     }
 
     private List<MajorResponseDto> setUpMajorDTOS(List<Major> majors) {
         List<MajorResponseDto> majorResponseDtos = new LinkedList<>();
         for (Major major : majors) {
             MajorResponseDto majorResponseDTO = majorMapper.toMajorResponseDTO(major);
-            byte[] content = major.getPhoto().getContent();
-            if (content != null) {
-                majorResponseDTO.setPhoto(encoder.encodeToString(content));
+            Photo photo = major.getPhoto();
+            if (photo != null) {
+                majorResponseDTO.setPhoto(encoder.encodeToString(photo.getContent()));
             }
             majorResponseDtos.add(
                     majorResponseDTO

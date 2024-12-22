@@ -14,4 +14,6 @@ public interface StudentRepository extends JpaRepository<Student, UUID> {
 
     @Query("from Student s where s.user.email = :email")
     Optional<Student> findByEmail(@Param("email") String email);
+
+    boolean existsStudentByStudentId(@NotBlank(message = "studentId cannot be blank") String studentId);
 }

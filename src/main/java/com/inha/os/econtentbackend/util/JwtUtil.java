@@ -24,7 +24,13 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         String rolesString = String.join(",", roles);
         claims.put("roles", rolesString);
-        return Jwts.builder().setClaims(claims).setSubject(email).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + expirationTime)).signWith(SignatureAlgorithm.HS256, secretKey).compact();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
 

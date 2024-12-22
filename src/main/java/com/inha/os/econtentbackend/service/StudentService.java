@@ -11,8 +11,13 @@ import com.inha.os.econtentbackend.exception.UserNotFoundException;
 import javax.management.relation.RoleNotFoundException;
 
 public interface StudentService {
-    StudentCreateResponseDto createStudent(StudentCreateDto studentCreateDto) throws UserAlreadyExistsException, StudentAlreadyExistsException, RoleNotFoundException;
+    StudentCreateResponseDto createStudent(StudentCreateDto studentCreateDto) throws
+            UserAlreadyExistsException,
+            StudentAlreadyExistsException,
+            RoleNotFoundException;
 
 
     StudentProfileDto getProfile(String email) throws UserNotFoundException, StudentNotFoundException;
+
+    Long getTotalStudentsCount();
 }

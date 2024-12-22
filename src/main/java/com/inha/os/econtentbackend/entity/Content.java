@@ -19,6 +19,6 @@ public class Content extends BaseEntity {
     private ContentType contentType;
     @ManyToOne
     private Subject subject;
-    private byte[] data;
+    private String link;
     private String format;
 }

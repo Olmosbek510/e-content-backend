@@ -4,9 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import com.inha.os.econtentbackend.dto.request.StudentCreateDto;
 import com.inha.os.econtentbackend.dto.request.StudentProfileRequestDto;
+import com.inha.os.econtentbackend.dto.response.BaseResponse;
 import com.inha.os.econtentbackend.dto.response.StudentCreateResponseDto;
 import com.inha.os.econtentbackend.dto.response.StudentProfileDto;
+import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
+import com.inha.os.econtentbackend.entity.enums.RoleName;
 import com.inha.os.econtentbackend.entity.interfaces.Actions;
+import com.inha.os.econtentbackend.entity.interfaces.Entity;
 import com.inha.os.econtentbackend.exception.StudentAlreadyExistsException;
 import com.inha.os.econtentbackend.exception.StudentNotFoundException;
 import com.inha.os.econtentbackend.exception.UserAlreadyExistsException;
@@ -52,9 +56,16 @@ public class StudentActionDispatcher {
         return gson.toJson(profile);
     }
 
-    private String handleCreateStudent(String dataNode) throws StudentAlreadyExistsException, UserAlreadyExistsException, JsonProcessingException, RoleNotFoundException {
+    private String handleCreateStudent(String dataNode) throws StudentAlreadyExistsException, UserAlreadyExistsException, RoleNotFoundException {
         StudentCreateDto studentCreateDto = JsonUtil.getObject(StudentCreateDto.class, dataNode);
         StudentCreateResponseDto student = studentService.createStudent(studentCreateDto);
-        return gson.toJson(student);
+        BaseResponse response = BaseResponse.builder()
+                .data(gson.toJson(student))
+                .action(Actions.Student.CREATE_STUDENT)
+                .role(RoleName.ROLE_STUDENT.name())
+                .entity(Entity.STUDENT)
+                .status(ResponseStatus.SUCCESS)
+                .build();
+        return gson.toJson(response);
     }
 }

@@ -17,10 +17,8 @@ import java.util.UUID;
 public interface StudentMapper {
     @Mapping(source = "university", target = "university")
     @Mapping(source = "phoneNumber", target = "phoneNumber")
-    @Mapping(source = "address", target = "address")
     Student toEntity(StudentCreateDto createDto);
 
-    @Mapping(source = "user.username", target = "username")
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "studentId", target = "studentId")
     StudentCreateResponseDto toCreateResponseDto(Student savedStudent);

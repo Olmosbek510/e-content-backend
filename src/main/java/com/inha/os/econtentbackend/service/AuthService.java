@@ -9,8 +9,6 @@ import java.nio.file.AccessDeniedException;
 import java.util.Set;
 
 public interface AuthService {
-    String authenticate(String username, String password) throws Exception;
-
     /**
      * Checks if the user can perform the given action based on their roles.
      * @param action The action to be performed.

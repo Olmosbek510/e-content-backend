@@ -1,4 +1,8 @@
 package com.inha.os.econtentbackend.service;
 
-public class ContentTypeService {
+import com.inha.os.econtentbackend.entity.ContentType;
+import com.inha.os.econtentbackend.exception.ContentTypeAlreadyExistsException;
+
+public interface ContentTypeService {
+    ContentType save(ContentType build) throws ContentTypeAlreadyExistsException;
 }

@@ -17,6 +17,6 @@ public class ContentManager extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
 }

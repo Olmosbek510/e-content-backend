@@ -1,4 +1,5 @@
 package com.inha.os.econtentbackend.service;
 
-public class ArticleService {
+public interface ArticleService {
+    Long getTotalActiclesCount();
 }

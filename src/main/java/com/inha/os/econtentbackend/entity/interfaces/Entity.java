@@ -5,4 +5,8 @@ public interface Entity {
     String USER = "USER";
     String AUTH = "AUTH";
     String MAJOR = "MAJOR";
+    String SUBJECT = "SUBJECT";
+    String SYSTEM_ADMIN = "SYSTEM_ADMIN";
+    String BOOK = "BOOK";
+    String STATISTICS_DASHBOARD = "STATISTICS_DASHBOARD";
 }
