@@ -1,4 +1,4 @@
-{
+"{
                                      "entity": "STUDENT",
                                      "action": "CREATE_STUDENT",
                                      "data": "{
@@ -16,7 +16,8 @@
                                                 }",
                                      "token": null
 }
-<<EOF>>
+"
+
 
 Login dto
 ---
