@@ -20,7 +20,7 @@ public interface MajorService {
 
     Major save(Major build) throws MajorAlreadyExistsException;
 
-    MajorCreateResponseDto createMajor(MajorCreateRequestDto majorCreateDto);
+    MajorCreateResponseDto createMajor(MajorCreateRequestDto majorCreateDto) throws MajorAlreadyExistsException;
 
     MajorUpdateResponseDto updateMajor(MajorUpdateRequestDto majorUpdateRequestDto) throws MajorNotFoundException, MajorNameAlreadyExistsException;
 

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MajorNameResponseDto {
-    private Integer id;
+    private Integer majorId;
     private String name;
 }

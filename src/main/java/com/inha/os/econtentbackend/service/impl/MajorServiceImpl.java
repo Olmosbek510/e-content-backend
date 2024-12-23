@@ -5,7 +5,6 @@ import com.inha.os.econtentbackend.dto.request.MajorDeleteRequestDto;
 import com.inha.os.econtentbackend.dto.request.MajorUpdateRequestDto;
 import com.inha.os.econtentbackend.dto.response.*;
 import com.inha.os.econtentbackend.entity.Major;
-import com.inha.os.econtentbackend.entity.Photo;
 import com.inha.os.econtentbackend.exception.MajorAlreadyExistsException;
 import com.inha.os.econtentbackend.exception.MajorNameAlreadyExistsException;
 import com.inha.os.econtentbackend.exception.MajorNotFoundException;
@@ -13,7 +12,6 @@ import com.inha.os.econtentbackend.mapper.MajorMapper;
 import com.inha.os.econtentbackend.repository.MajorRepository;
 import com.inha.os.econtentbackend.service.MajorService;
 import com.inha.os.econtentbackend.service.PhotoService;
-import com.inha.os.econtentbackend.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,14 +60,12 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
-    public MajorCreateResponseDto createMajor(MajorCreateRequestDto majorCreateDto) {
+    public MajorCreateResponseDto createMajor(MajorCreateRequestDto majorCreateDto) throws MajorAlreadyExistsException {
         Major major = Major.builder()
                 .name(majorCreateDto.getName())
-                .description(majorCreateDto.getDescription())
                 .build();
-        if (majorCreateDto.getBase64Photo() != null && !majorCreateDto.getPhotoName().isBlank()) {
-            Photo photo = photoService.create(majorCreateDto.getBase64Photo(), majorCreateDto.getPhotoName());
-            major.setPhoto(photo);
+        if (majorRepository.existsMajorByName(majorCreateDto.getName())) {
+            throw new MajorAlreadyExistsException("Major '%s' already exists".formatted(majorCreateDto.getName()));
         }
         Major savedMajor = majorRepository.save(major);
         return MajorCreateResponseDto.builder().majorName(savedMajor.getName()).build();
@@ -91,18 +87,9 @@ public class MajorServiceImpl implements MajorService {
         if (!majorUpdateRequestDto.getName().isBlank()) {
             oldMajor.setName(majorUpdateRequestDto.getName());
         }
-        if (!majorUpdateRequestDto.getDescription().isBlank()) {
-            oldMajor.setDescription(majorUpdateRequestDto.getDescription());
-        }
-        if (!majorUpdateRequestDto.getPhotoName().isBlank() && !majorUpdateRequestDto.getPhotoContent().isBlank()) {
-            Photo photo = oldMajor.getPhoto();
-            photo.setContent(decoder.decode(majorUpdateRequestDto.getPhotoContent()));
-            photo.setType(FileUtil.getFileExtension(majorUpdateRequestDto.getPhotoName()));
-        }
         Major updatedMajor = majorRepository.save(oldMajor);
         return MajorUpdateResponseDto.builder()
-                .description(updatedMajor.getDescription())
-                .name(updatedMajor.getDescription())
+                .name(updatedMajor.getName())
                 .build();
     }
 
@@ -118,14 +105,14 @@ public class MajorServiceImpl implements MajorService {
 
     @Override
     public MajorDeleteResponseDto deleteMajor(MajorDeleteRequestDto deleteRequestDto) throws MajorNotFoundException {
-        Optional<Major> optionalMajor = majorRepository.findById(deleteRequestDto.getId());
-        if (optionalMajor.isPresent()) {
-            throw new MajorNotFoundException("Major with id '%s' not found".formatted(deleteRequestDto.getId()));
+        Optional<Major> optionalMajor = majorRepository.findById(deleteRequestDto.getMajorId());
+        if (optionalMajor.isEmpty()) {
+            throw new MajorNotFoundException("Major with id '%s' not found".formatted(deleteRequestDto.getMajorId()));
         }
         MajorDeleteResponseDto response = MajorDeleteResponseDto.builder()
-                .id(deleteRequestDto.getId())
+                .id(deleteRequestDto.getMajorId())
                 .build();
-        majorRepository.deleteById(deleteRequestDto.getId());
+        majorRepository.deleteById(deleteRequestDto.getMajorId());
         return response;
     }
 
@@ -133,10 +120,6 @@ public class MajorServiceImpl implements MajorService {
         List<MajorResponseDto> majorResponseDtos = new LinkedList<>();
         for (Major major : majors) {
             MajorResponseDto majorResponseDTO = majorMapper.toMajorResponseDTO(major);
-            Photo photo = major.getPhoto();
-            if (photo != null) {
-                majorResponseDTO.setPhoto(encoder.encodeToString(photo.getContent()));
-            }
             majorResponseDtos.add(
                     majorResponseDTO
             );

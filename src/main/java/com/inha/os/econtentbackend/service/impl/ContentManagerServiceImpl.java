@@ -29,7 +29,11 @@ public class ContentManagerServiceImpl implements ContentManagerService {
     @Override
     public ContentManagerCreateResponseDto createContentManager(ContentManagerCreateRequestDto contentManager) throws RoleNotFoundException, UserAlreadyExistsException {
         String rawPassword = contentManager.getPassword();
-        User savedUser = userService.save(userService.setUpUser(contentManager));
+        User user = userService.setUpUser(contentManager);
+        User savedUser = userService.save(user);
+
+        System.out.println(savedUser);
+
         ContentManager manager = ContentManager.builder()
                 .user(savedUser)
                 .build();

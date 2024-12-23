@@ -21,7 +21,8 @@ public class Article extends BaseEntity {
     private String reference;
     @Column(nullable = false)
     private Year publishYear;
-    @OneToOne
+    private String textContent;
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Content content;
 }
 

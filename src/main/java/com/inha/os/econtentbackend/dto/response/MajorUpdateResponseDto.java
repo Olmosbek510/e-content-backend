@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class MajorUpdateResponseDto {
     private Integer id;
     private String name;
-    private String description;
 }

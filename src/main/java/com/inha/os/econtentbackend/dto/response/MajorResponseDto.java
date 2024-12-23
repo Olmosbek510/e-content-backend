@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MajorResponseDto {
-    private Integer id;
+    private Integer majorId;
     private String name;
-    private String description;
-    private String photo;
 }

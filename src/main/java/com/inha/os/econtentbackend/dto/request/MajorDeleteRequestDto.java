@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MajorDeleteRequestDto {
-    private Integer id;
+    private Integer majorId;
 }

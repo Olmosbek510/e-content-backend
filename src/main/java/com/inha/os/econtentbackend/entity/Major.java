@@ -17,8 +17,4 @@ public class Major extends BaseEntity {
     private Integer id;
     @Column(nullable = false, unique = true)
     private String name;
-    @Column(nullable = false)
-    private String description;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Photo photo;
 }

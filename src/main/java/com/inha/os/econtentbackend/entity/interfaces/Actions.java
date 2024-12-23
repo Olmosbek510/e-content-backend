@@ -3,6 +3,7 @@ package com.inha.os.econtentbackend.entity.interfaces;
 public interface Actions {
     interface Books {
         String CREATE_BOOK = "CREATE_BOOK";
+        String GET_BOOK_NAMES = "GET_BOOK_NAMES";
     }
 
     interface Statistics {
@@ -30,5 +31,6 @@ public interface Actions {
     interface Subject {
         String GET_SUBJECTS = "GET_SUBJECTS";
         String ADD_SUBJECT = "ADD_SUBJECT";
+        String GET_SUBJECT_NAMES = "GET_SUBJECT_NAMES";
     }
 }

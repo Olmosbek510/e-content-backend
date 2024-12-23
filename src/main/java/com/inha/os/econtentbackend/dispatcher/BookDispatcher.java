@@ -21,8 +21,15 @@ public class BookDispatcher {
             throw new AccessDeniedException("Unauthorized access: You do not have permission to perform this action.");
         } else if (action.equals(Actions.Books.CREATE_BOOK)) {
             return handleSaveBook(dataNode);
+        } else if (action.equalsIgnoreCase(Actions.Books.GET_BOOK_NAMES)) {
+            return handleGetBookNames(dataNode, token);
         }
         return "Unknown user action: " + action;
+    }
+
+    private String handleGetBookNames(String dataNode, String token) {
+//        BookGetNamesRequestDto
+        return "";
     }
 
     private String handleSaveBook(String dataNode) {

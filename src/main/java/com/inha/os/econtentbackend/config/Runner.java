@@ -6,6 +6,7 @@ import com.inha.os.econtentbackend.entity.ContentType;
 import com.inha.os.econtentbackend.entity.Major;
 import com.inha.os.econtentbackend.entity.Subject;
 import com.inha.os.econtentbackend.entity.enums.ContentTypeName;
+import com.inha.os.econtentbackend.entity.enums.RoleName;
 import com.inha.os.econtentbackend.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -26,10 +27,23 @@ public class Runner implements CommandLineRunner {
     private final ContentTypeService contentTypeService;
     private final ContentManagerService contentManagerService;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     @SneakyThrows
     @Override
     public void run(String... args) {
 
+//        for (RoleName value : RoleName.values()) {
+//            roleService.save(value);
+//        }
+//
+//        contentManagerService.createContentManager(
+//                ContentManagerCreateRequestDto.builder()
+//                        .password("root123")
+//                        .email("manager@gmail.com")
+//                        .firstName("Olmos")
+//                        .lastName("Urazboev")
+//                        .build()
+//        );
     }
 }

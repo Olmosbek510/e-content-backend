@@ -1,7 +1,9 @@
 package com.inha.os.econtentbackend.service.impl;
 
 import com.inha.os.econtentbackend.dto.request.SubjectCreateRequestDto;
+import com.inha.os.econtentbackend.dto.request.SubjectGetNamesRequestDto;
 import com.inha.os.econtentbackend.dto.response.SubjectCreateResponseDto;
+import com.inha.os.econtentbackend.dto.response.SubjectNameResponseDto;
 import com.inha.os.econtentbackend.dto.response.SubjectResponseDto;
 import com.inha.os.econtentbackend.entity.Major;
 import com.inha.os.econtentbackend.entity.Subject;
@@ -63,5 +65,18 @@ public class SubjectServiceImpl implements SubjectService {
                 .name(savedSubject.getName())
                 .id(savedSubject.getId())
                 .build();
+    }
+
+    @Override
+    public List<SubjectNameResponseDto> getSubjectNames(SubjectGetNamesRequestDto subjectGetNamesRequestDto) {
+        List<Subject> subjects = subjectRepository.findAllByMajorId(subjectGetNamesRequestDto.getMajorId());
+        List<SubjectNameResponseDto> subjectNameResponseDtos = new LinkedList<>();
+        for (Subject subject : subjects) {
+            subjectNameResponseDtos.add(SubjectNameResponseDto.builder()
+                    .name(subject.getName())
+                    .id(subject.getId())
+                    .build());
+        }
+        return subjectNameResponseDtos;
     }
 }

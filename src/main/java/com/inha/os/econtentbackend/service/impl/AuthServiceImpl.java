@@ -54,7 +54,14 @@ public class AuthServiceImpl implements AuthService {
             return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
                     roles.contains(RoleName.ROLE_SYS_ADMIN.name());
         } else if (action.startsWith(Actions.Majors.ADD_MAJOR)) {
-            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name());
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.Majors.UPDATE_MAJOR)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.Majors.DELETE_MAJOR)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
         }
         return false;
     }
