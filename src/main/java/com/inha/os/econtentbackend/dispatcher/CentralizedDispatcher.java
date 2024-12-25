@@ -3,6 +3,7 @@ package com.inha.os.econtentbackend.dispatcher;
 import com.google.gson.Gson;
 import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
 import com.inha.os.econtentbackend.entity.interfaces.Entity;
+import com.inha.os.econtentbackend.exception.BookNotFoundException;
 import com.inha.os.econtentbackend.exception.InvalidEntityException;
 import com.inha.os.econtentbackend.exception.BaseException;
 import com.inha.os.econtentbackend.util.ExceptionUtils;
@@ -21,6 +22,8 @@ public class CentralizedDispatcher {
     private final SystemAdminDispatcher systemAdminDispatcher;
     private final BookDispatcher bookDispatcher;
     private final DashboardDispatcher dashboardDispatcher;
+    private final ArticleDispatcher articleDispatcher;
+    private final ELetterDispatcher eLetterDispatcher;
 
     /**
      * Dispatches the request based on the entity and action.
@@ -31,7 +34,7 @@ public class CentralizedDispatcher {
      * @param token
      * @return The response message or error response.
      */
-    public String dispatch(String entity, String action, String dataNode, String token) {
+    public String dispatch(String entity, String action, String dataNode, String token) throws BookNotFoundException {
         try {
             if (entity.equalsIgnoreCase(Entity.AUTH)) {
                 return authorizationDispatcher.dispatch(action, dataNode, token);
@@ -47,6 +50,10 @@ public class CentralizedDispatcher {
                 return systemAdminDispatcher.dispatch(action, dataNode, token);
             } else if (entity.equalsIgnoreCase(Entity.STATISTICS_DASHBOARD)) {
                 return dashboardDispatcher.dispatch(action, dataNode, token);
+            } else if (entity.equalsIgnoreCase(Entity.ARTICLE)) {
+                return articleDispatcher.dispatch(action, dataNode, token);
+            } else if (entity.equalsIgnoreCase(Entity.E_LETTER)) {
+                return eLetterDispatcher.dispatch(action, dataNode, token);
             } else {
                 throw new InvalidEntityException("entity '%s' is invalid".formatted(entity));
             }

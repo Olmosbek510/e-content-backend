@@ -6,7 +6,7 @@
 #include <pthread.h>
 
 #define CLIENT_PORT 9000   // Port for Flutter client to connect
-#define BACKEND_PORT 9090  // Port to connect to Spring Boot backend
+#define BACKEND_PORT 9091  // Port to connect to Spring Boot backend
 #define BUFFER_SIZE 4096
 
 // Global backend socket (shared among threads)

@@ -30,7 +30,7 @@ public class MajorActionDispatcher {
     private final JwtUtil jwtUtil;
     private final Gson gson;
 
-    public String dispatch(String action, String dataNode, String token) throws AccessDeniedException, StudentAlreadyExistsException, UserAlreadyExistsException, UserNotFoundException, StudentNotFoundException, MajorNotFoundException, MajorNameAlreadyExistsException {
+    public String dispatch(String action, String dataNode, String token) throws AccessDeniedException, StudentAlreadyExistsException, UserAlreadyExistsException, UserNotFoundException, StudentNotFoundException, MajorNotFoundException, MajorNameAlreadyExistsException, MajorAlreadyExistsException {
         if (token != null && !authService.canPerformAction(action, token)) {
             throw new AccessDeniedException("Unauthorized access: You do not have permission to perform this action.");
         } else if (action.equals(Actions.Majors.GET_MAJORS) && authService.canPerformAction(action, token)) {
@@ -87,7 +87,7 @@ public class MajorActionDispatcher {
         return gson.toJson(baseResponse);
     }
 
-    private String handleAddMajor(String dataNode, String token) {
+    private String handleAddMajor(String dataNode, String token) throws MajorAlreadyExistsException {
         MajorCreateRequestDto majorCreateDto = JsonUtil.getObject(MajorCreateRequestDto.class, dataNode);
         MajorCreateResponseDto major = majorService.createMajor(majorCreateDto);
         Set<String> roles = jwtUtil.extractRoles(token);

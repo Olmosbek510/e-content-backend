@@ -16,7 +16,6 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-
 jwt:
   secret:
     key: "WCILX9EyoOCuNtzRFYw5QSm6vFBCtdVq0XAsHZnXnDPbwmxMxCWYFTmf9j1QccVI"
@@ -25,11 +24,12 @@ jwt:
 
 backend:
   socket:
-    port: 9090
+    port: 9091
 #tcp:
 #  server:
 #    port: 9090
 #    host: "127.0.0.1"
 #server:
-#  port: 8081
-
+server:
+  port: 8082
+#  port: 8081server:

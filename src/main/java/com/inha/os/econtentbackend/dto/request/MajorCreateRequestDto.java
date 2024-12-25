@@ -11,7 +11,4 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MajorCreateRequestDto {
     private String name;
-    private String description;
-    private String base64Photo;
-    private String photoName;
 }

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Year;
 
@@ -20,8 +22,9 @@ public class Article extends BaseEntity {
     private String title;
     private String reference;
     @Column(nullable = false)
-    private Year publishYear;
-    @OneToOne
+    private Integer publishYear;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Content content;
 }
 

@@ -20,8 +20,7 @@ public class Book extends BaseEntity {
     private String title;
     private String author;
     private Integer page;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Photo photo;
-    @OneToOne(cascade = CascadeType.ALL)
+    private String description;
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Content content;
 }

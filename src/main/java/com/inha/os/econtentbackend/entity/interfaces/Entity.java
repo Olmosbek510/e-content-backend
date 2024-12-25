@@ -9,4 +9,6 @@ public interface Entity {
     String SYSTEM_ADMIN = "SYSTEM_ADMIN";
     String BOOK = "BOOK";
     String STATISTICS_DASHBOARD = "STATISTICS_DASHBOARD";
+    String ARTICLE = "ARTICLE";
+    String E_LETTER = "E_LETTER";
 }

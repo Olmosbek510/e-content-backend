@@ -4,7 +4,6 @@ import com.inha.os.econtentbackend.dto.request.LoginRequestDto;
 import com.inha.os.econtentbackend.dto.response.LoginResponseDto;
 import com.inha.os.econtentbackend.entity.Role;
 import com.inha.os.econtentbackend.entity.User;
-import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
 import com.inha.os.econtentbackend.entity.enums.RoleName;
 import com.inha.os.econtentbackend.entity.interfaces.Actions;
 import com.inha.os.econtentbackend.exception.InvalidCredentialsException;
@@ -54,7 +53,44 @@ public class AuthServiceImpl implements AuthService {
             return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
                     roles.contains(RoleName.ROLE_SYS_ADMIN.name());
         } else if (action.startsWith(Actions.Majors.ADD_MAJOR)) {
-            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name());
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.Majors.UPDATE_MAJOR)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.Majors.DELETE_MAJOR)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.Subject.UPDATE_SUBJECT)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.Subject.ADD_SUBJECT)) {
+            return roles.contains(RoleName.ROLE_SYS_ADMIN.name()) ||
+                    roles.contains(RoleName.ROLE_CONTENT_MANAGER.name());
+        } else if (action.startsWith(Actions.Subject.DELETE_SUBJECT)) {
+            return roles.contains(RoleName.ROLE_SYS_ADMIN.name()) ||
+                    roles.contains(RoleName.ROLE_CONTENT_MANAGER.name());
+        } else if (action.startsWith(Actions.Books.GET_BOOKS)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name()) ||
+                    roles.contains(RoleName.ROLE_STUDENT.name());
+        } else if (action.startsWith(Actions.Books.DELETE_BOOK)) {
+            return roles.contains(RoleName.ROLE_SYS_ADMIN.name()) ||
+                    roles.contains(RoleName.ROLE_CONTENT_MANAGER.name());
+        } else if (action.startsWith(Actions.Article.GET_ARTICLES)) {
+            return roles.contains(RoleName.ROLE_SYS_ADMIN.name()) ||
+                    roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_STUDENT.name());
+        } else if (action.startsWith(Actions.ELetter.CREATE_E_LETTER)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.ELetter.GET_E_LETTERS)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name()) ||
+                    roles.contains(RoleName.ROLE_STUDENT.name());
+        } else if (action.startsWith(Actions.ELetter.DELETE_E_LETTER)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
         }
         return false;
     }

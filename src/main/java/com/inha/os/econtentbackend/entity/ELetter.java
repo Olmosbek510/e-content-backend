@@ -20,4 +20,7 @@ public class ELetter {
     private Content content;
     @Column(nullable = false)
     private String author;
+    private String title;
+    private String type;
+    private String relatedTo;
 }

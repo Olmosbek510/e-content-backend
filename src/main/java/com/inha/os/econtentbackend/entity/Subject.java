@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +18,9 @@ public class Subject extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @ManyToOne
+    @JoinColumn(name = "major_id", nullable = false) // Enforces a foreign key constraint
+    @OnDelete(action = OnDeleteAction.CASCADE) // Deletes the Subject when Major is deleted
     private Major major;
 }

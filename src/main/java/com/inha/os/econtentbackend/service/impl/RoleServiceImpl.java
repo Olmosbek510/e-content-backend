@@ -44,4 +44,13 @@ public class RoleServiceImpl implements RoleService {
         }
         return optionalRole.get();
     }
+
+    @Override
+    public void initDb() {
+        for (RoleName value : RoleName.values()) {
+            roleRepository.save(Role.builder()
+                    .roleName(value)
+                    .build());
+        }
+    }
 }
