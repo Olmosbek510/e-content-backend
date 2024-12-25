@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class SubjectGetRequestDto {
-    private Integer id;
+    private Integer majorId;
 }

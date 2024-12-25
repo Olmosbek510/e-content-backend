@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +19,13 @@ public class Content extends BaseEntity {
     private Integer id;
     @ManyToOne
     private ContentType contentType;
+
     @ManyToOne
+    @JoinColumn(name = "subject_id", nullable = false) // Enforces a foreign key constraint
+    @OnDelete(action = OnDeleteAction.CASCADE) //
     private Subject subject;
-    private String link;
+    @Lob
+    @Column(name = "file_data")
+    private byte[] data;
     private String format;
 }

@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class BookCreateRequestDto {
-
     private String base64StringBook;
 }

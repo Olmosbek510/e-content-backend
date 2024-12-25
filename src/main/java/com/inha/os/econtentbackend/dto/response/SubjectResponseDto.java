@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class SubjectResponseDto {
-    private Integer id;
+    private Integer subjectId;
     private String name;
     private Integer totalMaterialsCount;
 }

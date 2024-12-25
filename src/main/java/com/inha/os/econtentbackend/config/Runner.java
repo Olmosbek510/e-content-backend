@@ -1,10 +1,10 @@
 package com.inha.os.econtentbackend.config;
 
-import com.inha.os.econtentbackend.dto.request.ContentManagerCreateRequestDto;
-import com.inha.os.econtentbackend.dto.request.StudentCreateDto;
+import com.inha.os.econtentbackend.dto.request.*;
 import com.inha.os.econtentbackend.entity.ContentType;
 import com.inha.os.econtentbackend.entity.Major;
 import com.inha.os.econtentbackend.entity.Subject;
+import com.inha.os.econtentbackend.entity.SystemAdmin;
 import com.inha.os.econtentbackend.entity.enums.ContentTypeName;
 import com.inha.os.econtentbackend.entity.enums.RoleName;
 import com.inha.os.econtentbackend.service.*;
@@ -28,22 +28,22 @@ public class Runner implements CommandLineRunner {
     private final ContentManagerService contentManagerService;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final SystemAdminService adminService;
 
     @SneakyThrows
     @Override
     public void run(String... args) {
+        if (ddlAuto.equalsIgnoreCase("create")) {
+            contentTypeService.initDb();
+            roleService.initDb();
+            adminService.create(SystemAdminCreateRequestDto.builder()
+                    .firstName("Olmosbek")
+                    .lastName("Urazboev")
+                    .password("olmos555%")
+                    .email("urazboev04@gmail.com")
+                    .build());
+        }
 
-//        for (RoleName value : RoleName.values()) {
-//            roleService.save(value);
-//        }
-//
-//        contentManagerService.createContentManager(
-//                ContentManagerCreateRequestDto.builder()
-//                        .password("root123")
-//                        .email("manager@gmail.com")
-//                        .firstName("Olmos")
-//                        .lastName("Urazboev")
-//                        .build()
-//        );
+
     }
 }

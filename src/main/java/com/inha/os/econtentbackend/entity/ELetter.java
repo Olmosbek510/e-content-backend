@@ -18,7 +18,9 @@ public class ELetter {
     private Integer id;
     @OneToOne(cascade = CascadeType.ALL)
     private Content content;
-    private String contentText;
     @Column(nullable = false)
     private String author;
+    private String title;
+    private String type;
+    private String relatedTo;
 }

@@ -5,6 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import com.inha.os.econtentbackend.dispatcher.CentralizedDispatcher;
 import com.inha.os.econtentbackend.dto.request.RequestDto;
 import com.inha.os.econtentbackend.entity.enums.ResponseStatus;
+import com.inha.os.econtentbackend.exception.BookNotFoundException;
 import com.inha.os.econtentbackend.util.ExceptionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

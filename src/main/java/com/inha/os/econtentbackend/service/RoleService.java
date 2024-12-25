@@ -12,4 +12,7 @@ public interface RoleService {
     Role save(RoleName value) throws RoleAlreadyExistsException;
 
     Role findByName(RoleName roleName) throws RoleNotFoundException;
+
+    void initDb();
+
 }
