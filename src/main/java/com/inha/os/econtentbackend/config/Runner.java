@@ -1,12 +1,6 @@
 package com.inha.os.econtentbackend.config;
 
 import com.inha.os.econtentbackend.dto.request.*;
-import com.inha.os.econtentbackend.entity.ContentType;
-import com.inha.os.econtentbackend.entity.Major;
-import com.inha.os.econtentbackend.entity.Subject;
-import com.inha.os.econtentbackend.entity.SystemAdmin;
-import com.inha.os.econtentbackend.entity.enums.ContentTypeName;
-import com.inha.os.econtentbackend.entity.enums.RoleName;
 import com.inha.os.econtentbackend.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -33,7 +27,7 @@ public class Runner implements CommandLineRunner {
     @SneakyThrows
     @Override
     public void run(String... args) {
-        if (ddlAuto.equalsIgnoreCase("create")) {
+        if (ddlAuto.equalsIgnoreCase("update")) {
             contentTypeService.initDb();
             roleService.initDb();
             adminService.create(SystemAdminCreateRequestDto.builder()
