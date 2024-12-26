@@ -44,11 +44,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public String createArticle(ArticleCreateRequestDto articleCreateRequestDto) throws ContentTypeNotFoundExceptionHttp, SubjectNotFoundExceptionHttp, IOException {
+    public String createArticle(ArticleCreateRequestDto articleCreateRequestDto) throws
+            ContentTypeNotFoundExceptionHttp,
+            SubjectNotFoundExceptionHttp,
+            IOException {
         Article article = articleMapper.toEntity(articleCreateRequestDto);
         Content articleContent = contentService.createArticleContent(articleCreateRequestDto);
         article.setContent(articleContent);
         articleRepository.save(article);
+
         return "article '%s' created successfully".formatted(articleCreateRequestDto.getTitle());
     }
 
@@ -60,5 +64,15 @@ public class ArticleServiceImpl implements ArticleService {
             throw new ArticleNotFoundException("Article with Id not ");
         }
         return optionalArticle.get();
+    }
+
+    @Override
+    public String deleteById(ArticleResponseDto articleDto) throws ArticleNotFoundException {
+        Integer articleId = articleDto.getArticleId();
+        if (!articleRepository.existsArticleById(articleId)) {
+            throw new ArticleNotFoundException("article with id '%s' not found".formatted(articleId));
+        }
+        articleRepository.deleteById(articleId);
+        return "article with id '%s' deleted".formatted(articleId);
     }
 }

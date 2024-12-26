@@ -21,6 +21,7 @@ public class Article extends BaseEntity {
     private Integer id;
     private String title;
     private String reference;
+    private String author;
     @Column(nullable = false)
     private Integer publishYear;
     @OneToOne(cascade = CascadeType.REMOVE)

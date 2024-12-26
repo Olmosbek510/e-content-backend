@@ -16,5 +16,6 @@ public interface ArticleMapper {
     ArticleResponseDto toResponseDto(Article article);
 
 
+    @Mapping(source = "author", target = "author")
     Article toEntity(ArticleCreateRequestDto articleCreateRequestDto);
 }

@@ -91,6 +91,12 @@ public class AuthServiceImpl implements AuthService {
         } else if (action.startsWith(Actions.ELetter.DELETE_E_LETTER)) {
             return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
                     roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.Article.CREATE_ARTICLE)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
+        } else if (action.startsWith(Actions.Article.DELETE_ARTICLE)) {
+            return roles.contains(RoleName.ROLE_CONTENT_MANAGER.name()) ||
+                    roles.contains(RoleName.ROLE_SYS_ADMIN.name());
         }
         return false;
     }

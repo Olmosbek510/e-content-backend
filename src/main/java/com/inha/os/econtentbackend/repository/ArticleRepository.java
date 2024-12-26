@@ -14,4 +14,6 @@ public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
     @Query("from Article a where a.content.subject.id = :subjectId")
     List<Article> findBySubjectId(@Param("subjectId") Integer subjectId);
+
+    boolean existsArticleById(Integer articleId);
 }

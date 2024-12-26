@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ArticleResponseDto {
+    private String author;
     private Integer articleId;
     private String title;
     private String reference;

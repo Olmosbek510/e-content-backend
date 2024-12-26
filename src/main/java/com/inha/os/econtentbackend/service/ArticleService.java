@@ -20,4 +20,6 @@ public interface ArticleService {
     String createArticle(ArticleCreateRequestDto articleCreateRequestDto) throws ContentTypeNotFoundExceptionHttp, SubjectNotFoundExceptionHttp, IOException;
 
     Article getById(Integer id) throws ArticleNotFoundException;
+
+    String deleteById(ArticleResponseDto articleDto) throws ArticleNotFoundException;
 }
