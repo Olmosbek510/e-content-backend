@@ -27,7 +27,7 @@ public class Runner implements CommandLineRunner {
     @SneakyThrows
     @Override
     public void run(String... args) {
-        if (ddlAuto.equalsIgnoreCase("update")) {
+        if (ddlAuto.equalsIgnoreCase("create")) {
             contentTypeService.initDb();
             roleService.initDb();
             adminService.create(SystemAdminCreateRequestDto.builder()
